@@ -17,5 +17,7 @@ public interface UserServiceInterface {
     void save(UserModel entityModel);
 
     boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }
 
