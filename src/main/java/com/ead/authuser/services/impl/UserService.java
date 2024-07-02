@@ -30,4 +30,14 @@ public class UserService  implements UserServiceInterface {
     public void deleteUser(UserModel userModel) {
         userRepository.delete(userModel);
     }
+
+    @Override
+    public void save(UserModel entityModel) {
+        userRepository.save(entityModel);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }

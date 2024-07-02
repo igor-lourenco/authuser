@@ -13,5 +13,9 @@ public interface UserServiceInterface {
     Optional<UserModel> findById(UUID userId);
 
     void deleteUser(UserModel userModel);
+
+    void save(UserModel entityModel);
+
+    boolean existsByUsername(String username);
 }
 
