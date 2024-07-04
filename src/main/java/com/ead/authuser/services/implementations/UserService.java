@@ -1,4 +1,4 @@
-package com.ead.authuser.services.impl;
+package com.ead.authuser.services.implementations;
 
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;

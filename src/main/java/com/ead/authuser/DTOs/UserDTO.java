@@ -1,11 +1,13 @@
 package com.ead.authuser.DTOs;
 
+import com.ead.authuser.services.valid.UserNameValid;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ public class UserDTO {
     @JsonView(UserView.RegistrationPost.class)
     @NotBlank(groups = UserView.RegistrationPost.class)
     @Size(min = 4, max = 50)
+    @UserNameValid(groups = UserView.RegistrationPost.class)
     private String username;
 
     @JsonView(UserView.RegistrationPost.class)
@@ -50,6 +53,7 @@ public class UserDTO {
     private String phoneNumber;
 
     @JsonView({UserView.RegistrationPost.class, UserView.UserPut.class})
+    @Pattern(regexp = "(\\d{3}.?\\d{3}.?\\d{3}-?\\d{2})", message = "Campo 'cpf' inválido, padrão aceito 99999999999 ou 999.999.999-99", groups = {UserView.RegistrationPost.class, UserView.UserPut.class})
     private String cpf;
 
     @NotBlank(groups = UserView.ImagePut.class)
