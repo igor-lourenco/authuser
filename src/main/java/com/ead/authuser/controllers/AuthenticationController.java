@@ -10,13 +10,15 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600) // configura CORS para permitir solicitações de qualquer origem e define que a resposta de pré-verificação pode ser armazenada em cache por uma hora
+@CrossOrigin(origins = "*", maxAge = 3600)
+// configura CORS para permitir solicitações de qualquer origem e define que a resposta de pré-verificação pode ser armazenada em cache por uma hora
 @RequestMapping("/auth")
 public class AuthenticationController {
 
@@ -24,13 +26,14 @@ public class AuthenticationController {
     private UserServiceInterface userService;
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<?> registerUser(@RequestBody @JsonView(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO){
+    public ResponseEntity<?> registerUser(
+            @RequestBody @JsonView(UserDTO.UserView.RegistrationPost.class) @Validated(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO) {
 
-        if(userService.existsByUsername(userDTO.getUsername())){
+        if (userService.existsByUsername(userDTO.getUsername())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already taken!");
         }
 
-        if(userService.existsByEmail(userDTO.getEmail())){
+        if (userService.existsByEmail(userDTO.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Email is already taken!");
         }
 
