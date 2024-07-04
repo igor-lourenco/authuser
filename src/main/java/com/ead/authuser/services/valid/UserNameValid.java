@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD}) // Onde vai ser utilizado essa anotação
 @Retention(RetentionPolicy.RUNTIME)    // Definir quando que essa validação vai ocorrer, nesse caso em tempo de execução
 public @interface UserNameValid {
-
+:
     String message() default "Campo 'username' inválido, não pode ser nulo, vazio ou ter espaços em branco";   // mensagem padrão, quando ocorrer esse erro de validação
     Class<?>[] groups() default {};                // Grupo de validação, caso precise definir
     Class<? extends Payload>[] payload() default {}; // Nível que vai ocorrer o erro de validação
