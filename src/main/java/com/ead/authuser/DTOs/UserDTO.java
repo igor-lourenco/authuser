@@ -1,5 +1,6 @@
 package com.ead.authuser.DTOs;
 
+import com.ead.authuser.services.valid.EmailUpdateValid;
 import com.ead.authuser.services.valid.UserNameValid;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -14,13 +15,19 @@ import java.util.UUID;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-
-    public interface UserView{
+    public interface UserView {
         // Obs: se o atributo do UserDTO estiver mapeado, mas na View não correspondente, a annotation JsonView ignora o campo e salva com valor null
-        public static interface RegistrationPost{} // UserDTO Para registrar usuário
-        public static interface UserPut{} // UserDTO para atualizar os dados do usuário
-        public static interface PasswordPut{} // UserDTO para atualizar a senha do usuário
-        public static interface ImagePut{} // UserDTO para atualizar a imagem do usuário
+        public static interface RegistrationPost {
+        } // UserDTO Para registrar usuário
+
+        public static interface UserPut {
+        } // UserDTO para atualizar os dados do usuário
+
+        public static interface PasswordPut {
+        } // UserDTO para atualizar a senha do usuário
+
+        public static interface ImagePut {
+        } // UserDTO para atualizar a imagem do usuário
     }
 
     private UUID userId;
@@ -31,9 +38,10 @@ public class UserDTO {
     @UserNameValid(groups = UserView.RegistrationPost.class)
     private String username;
 
-    @JsonView(UserView.RegistrationPost.class)
+    @JsonView({UserView.RegistrationPost.class, UserView.UserPut.class})
     @NotBlank(groups = UserView.RegistrationPost.class)
     @Email(groups = UserView.RegistrationPost.class)
+    @EmailUpdateValid(groups = UserView.UserPut.class)
     private String email;
 
     @JsonView({UserView.RegistrationPost.class, UserView.PasswordPut.class})

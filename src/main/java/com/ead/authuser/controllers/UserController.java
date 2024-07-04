@@ -53,6 +53,7 @@ public class UserController {
             var userModel = entityDTO.get();
             userModel.setFullName(userDTO.getFullName());
             userModel.setPhoneNumber(userDTO.getPhoneNumber());
+            userModel.setEmail(userDTO.getEmail());
             userModel.setCpf(userDTO.getCpf());
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
