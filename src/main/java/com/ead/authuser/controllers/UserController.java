@@ -5,6 +5,10 @@ import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserServiceInterface;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600) // configura CORS para permitir solicitações de qualquer origem e define que a resposta de pré-verificação pode ser armazenada em cache por uma hora
+@CrossOrigin(origins = "*", maxAge = 3600)  // configura CORS para permitir solicitações de qualquer origem e define que a resposta de pré-verificação pode ser armazenada em cache por uma hora
 @RequestMapping("/users")
 public class UserController {
 
@@ -25,8 +29,13 @@ public class UserController {
     private UserServiceInterface userService;
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> findAllUsers() {
-        return ResponseEntity.ok().body(userService.findAll());
+    public ResponseEntity<Page<UserModel>> findAllUsers(
+            @PageableDefault(page = 0, size = 12, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+
+        Page<UserModel> userModelPage = userService.findAllPaged(pageable);
+
+        return ResponseEntity.ok().body(userModelPage);
     }
 
     @GetMapping(value = "/{userId}")
