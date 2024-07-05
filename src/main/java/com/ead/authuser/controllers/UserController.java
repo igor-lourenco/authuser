@@ -3,6 +3,7 @@ package com.ead.authuser.controllers;
 import com.ead.authuser.DTOs.UserDTO;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserServiceInterface;
+import com.ead.authuser.specifications.SpecificationTemplate;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,25 +27,28 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    private UserServiceInterface userService;
+    UserServiceInterface userService;
 
     @GetMapping
     public ResponseEntity<Page<UserModel>> findAllUsers(
+            SpecificationTemplate.UserSpec spec,
             @PageableDefault(page = 0, size = 12, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-
-        Page<UserModel> userModelPage = userService.findAllPaged(pageable);
+        Page<UserModel> userModelPage = userService.findAllPaged(spec, pageable);
 
         return ResponseEntity.ok().body(userModelPage);
     }
 
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<?> getOneuser(@PathVariable(value = "userId") UUID userId) {
+    public ResponseEntity<?> getOneUser(@PathVariable(value = "userId") UUID userId) {
+
         Optional<UserModel> entity = userService.findById(userId);
 
         if (entity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+
         } else {
+
             return ResponseEntity.ok(entity.get());
         }
     }
@@ -58,6 +62,7 @@ public class UserController {
 
         if (entityDTO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+
         } else {
             var userModel = entityDTO.get();
             userModel.setFullName(userDTO.getFullName());
@@ -83,6 +88,7 @@ public class UserController {
         }
 
         if (!userDTO.getOldPassword().equals(entityDTO.get().getPassword())) {
+
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismatched old password!");
         } else {
             var userModel = entityDTO.get();
@@ -102,6 +108,7 @@ public class UserController {
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
             var userModel = entityDTO.get();
@@ -119,8 +126,10 @@ public class UserController {
 
         if (entity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+
         } else {
             userService.deleteUser(entity.get());
+
             return ResponseEntity.ok("User deleted successfully");
         }
     }

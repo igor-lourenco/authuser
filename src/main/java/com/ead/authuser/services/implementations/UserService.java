@@ -3,9 +3,11 @@ package com.ead.authuser.services.implementations;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.repositories.UserRepository;
 import com.ead.authuser.services.UserServiceInterface;
+import com.ead.authuser.specifications.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,8 +51,9 @@ public class UserService  implements UserServiceInterface {
     }
 
     @Override
-    public Page<UserModel> findAllPaged(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserModel> findAllPaged(Specification<UserModel> spec, Pageable pageable) {
+        return userRepository.findAll(spec, pageable);
 
     }
+
 }
