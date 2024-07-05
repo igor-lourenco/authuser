@@ -8,7 +8,8 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.jpa.domain.Specification;
 
-public class SpecificationTemplate { // classe para especificar os filtros que não estão mapeados na controller
+/** Classe para especificar os filtros que não estão mapeados na Controller */
+public class SpecificationTemplate {
 
     @And({  // Combina múltiplos campos para filtrar
         @Spec(path = "userType", spec = EqualIgnoreCase.class), // Filtra pelo Enum UserType pelo valor exato usando o EqualsIgnoreCase.class

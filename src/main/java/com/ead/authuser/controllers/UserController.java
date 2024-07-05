@@ -21,8 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)  // configura CORS para permitir solicitações de qualquer origem e define que a resposta de pré-verificação pode ser armazenada em cache por uma hora
+@CrossOrigin(origins = "*", maxAge = 3600) // configura CORS para permitir solicitações de qualquer origem e define que a resposta de pré-verificação pode ser armazenada em cache por uma hora
 @RequestMapping("/users")
 public class UserController {
 
@@ -35,6 +38,8 @@ public class UserController {
             @PageableDefault(page = 0, size = 12, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<UserModel> userModelPage = userService.findAllPaged(spec, pageable);
+
+        userModelPage.forEach(user -> user.addLinks());
 
         return ResponseEntity.ok().body(userModelPage);
     }
@@ -49,7 +54,7 @@ public class UserController {
 
         } else {
 
-            return ResponseEntity.ok(entity.get());
+            return ResponseEntity.ok(entity.get().removeLinks());
         }
     }
 

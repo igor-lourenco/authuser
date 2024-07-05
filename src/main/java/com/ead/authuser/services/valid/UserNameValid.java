@@ -6,6 +6,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
+/**Se for null, ou vazio, ou tiver espaços em branco, retorna falso, ou seja, retorna erro na validação */
 @Documented
 @Constraint(validatedBy = UserNameValidator.class) // Classe que vai ter a implementação
 @Target({ElementType.METHOD, ElementType.FIELD}) // Onde vai ser utilizado essa anotação

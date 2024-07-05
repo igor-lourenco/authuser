@@ -1,11 +1,14 @@
 package com.ead.authuser.models;
 
+import com.ead.authuser.controllers.UserController;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.RepresentationModel;
 
 
 import javax.persistence.*;
@@ -13,11 +16,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Entity
 @Table(name = "TB_USERS")
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL) // ignora campos com valores nulos durante o processo de serialização
-public class UserModel implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_NULL) // Ignora campos com valores nulos durante a serialização para JSON
+public class UserModel extends RepresentationModel<UserModel> implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -31,7 +37,7 @@ public class UserModel implements Serializable {
     private String email;
 
     @Column(nullable = false, length = 255)
-    @JsonIgnore  // exclui campo da serialização e desserialização JSON
+    @JsonIgnore  // exclui campo da serialização e desserialização para JSON
     private String password;
 
     @Column(nullable = false, length = 150)
@@ -61,4 +67,20 @@ public class UserModel implements Serializable {
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss:SSS")
     private LocalDateTime lastUpdateDate;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY) // Ignora campo com valor vazio durante a serialização para JSON
+    @Override
+    public Links getLinks() {
+        return super.getLinks();
+    }
+
+    /** Adiciona link do hateoas */
+    public void addLinks() {
+        add(     // Adiciona o link fornecido ao recurso.
+                linkTo(
+                        methodOn(
+                                UserController.class)     // controller onde está o método
+                                .getOneUser(userId)    // método
+                ).withSelfRel());     // qualifica qual é a relação desse link com o recurso, nesse caso auto-relação
+    }
 }

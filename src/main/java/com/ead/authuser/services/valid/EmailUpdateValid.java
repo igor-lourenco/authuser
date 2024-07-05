@@ -7,6 +7,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
+/** Se o email já existir e o user não for igual ao user do email, retorna falso, ou seja, retorna erro na validação */
 @Documented
 @Constraint(validatedBy = EmailUpdateValidator.class) // Classe que vai ter a implementação
 @Target({ElementType.METHOD, ElementType.FIELD}) // Onde vai ser utilizado essa anotação
