@@ -1,6 +1,8 @@
 package com.ead.authuser.specifications;
 
 import com.ead.authuser.models.UserModel;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.EqualIgnoreCase;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
@@ -9,6 +11,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.jpa.domain.Specification;
 
 /** Classe para especificar os filtros que não estão mapeados na Controller */
+@ToString
 public class SpecificationTemplate {
 
     @And({  // Combina múltiplos campos para filtrar
@@ -16,6 +19,5 @@ public class SpecificationTemplate {
         @Spec(path = "userStatus", spec = Equal.class), // Filtra pelo Enum UserStatus pelo valor exato usando o Equals.class
         @Spec(path = "email", spec = Like.class) // Filtra pelo campo email onde contém o valor semelhante ao valor especificado usando o Like.class
     })
-    public interface UserSpec extends Specification<UserModel> {
-    }
+    public interface UserSpec extends Specification<UserModel> { }
 }
