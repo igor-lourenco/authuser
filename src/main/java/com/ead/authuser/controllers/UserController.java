@@ -77,12 +77,12 @@ public class UserController {
     public ResponseEntity<?> updateUser(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.UserPut.class) @Validated(UserDTO.UserView.UserPut.class) UserDTO userDTO) {
-        log.info("REQUEST - GET [updateUser] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
+        log.info("REQUEST - PUT [updateUser] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
-            log.warn("RESPONSE - GET [updateUser] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - PUT [updateUser] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
@@ -94,7 +94,7 @@ public class UserController {
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
 
-            log.info("RESPONSE - GET [updateUser] : {}", logUtils.convertObjectToJson(userModel));
+            log.info("RESPONSE - PUT [updateUser] : {}", logUtils.convertObjectToJson(userModel));
             return ResponseEntity.ok(userModel);
         }
     }
@@ -103,18 +103,18 @@ public class UserController {
     public ResponseEntity<?> updatePassword(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.PasswordPut.class) @Validated(UserDTO.UserView.PasswordPut.class) UserDTO userDTO) {
-        log.info("REQUEST - GET [updatePassword] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
+        log.info("REQUEST - PUT [updatePassword] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
 
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
-            log.warn("RESPONSE - GET [updatePassword] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - PUT [updatePassword] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
 
         if (!userDTO.getOldPassword().equals(entityDTO.get().getPassword())) {
-            log.warn("RESPONSE - GET [updatePassword] : Mismatched old password!");
+            log.warn("RESPONSE - PUT [updatePassword] : Mismatched old password!");
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismatched old password!");
 
         } else {
@@ -123,7 +123,7 @@ public class UserController {
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
 
-            log.info("RESPONSE - GET [updatePassword] : Password updated successfully!");
+            log.info("RESPONSE - PUT [updatePassword] : Password updated successfully!");
             return ResponseEntity.ok("Password updated successfully!");
         }
     }
@@ -132,11 +132,12 @@ public class UserController {
     public ResponseEntity<?> updateImage(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.ImagePut.class) @Validated(UserDTO.UserView.ImagePut.class) UserDTO userDTO) {
+        log.info("REQUEST - PUT [updateImage] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
-
+            log.warn("RESPONSE - PUT [updateImage] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
             var userModel = entityDTO.get();
@@ -144,20 +145,25 @@ public class UserController {
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
 
+            log.info("RESPONSE - PUT [updateImage] : {}", logUtils.convertObjectToJson(userModel));
             return ResponseEntity.ok(userModel);
         }
     }
 
     @DeleteMapping(value = "/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "userId") UUID userId) {
+        log.info("REQUEST - DELETE [deleteUser] PARAMS :: userId: {} ", userId.toString());
+
         Optional<UserModel> entity = userService.findById(userId);
 
         if (entity.isEmpty()) {
+            log.warn("RESPONSE - DELETE [deleteUser] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
             userService.deleteUser(entity.get());
 
+            log.info("RESPONSE - DELETE [deleteUser] : User deleted successfully!");
             return ResponseEntity.ok("User deleted successfully");
         }
     }
