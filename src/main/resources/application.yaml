@@ -6,12 +6,14 @@ spring:
     url: jdbc:postgresql://192.168.0.54:5432/ead-authuser
     username: postgres
     password: L@ur&nco@Postgres
+
   jpa:
     hibernate:
       ddl-auto: update                     # Atualiza o schema, mantendo os dados existentes
       dialect: org.hibernate.dialect.PostgreSQLDialect
       jdbc:
-        lob.non-contextual-creation: true  #  Configura o Hibernate para criar objetos LOB (Large Object) de forma não contextual. Isso é útil para evitar certos problemas de compatibilidade com o PostgreSQL.
-    properties:
-      hibernate:
-        show_sql: true                     # Mostra os SQL no console
+        lob.non-contextual-creation: true  # Configura o Hibernate para criar objetos LOB (Large Object) de forma nao contextual. Isso e util para evitar certos problemas de compatibilidade com o PostgreSQL.
+      properties:
+        hibernate:
+          show_sql: true                   # Mostra os SQL no console
+    open-in-view: false                   # Desativa o open-in-view para evitar consultas durante a renderizaÃ§Ã£o de visualizaÃ§Ãµes
