@@ -57,18 +57,19 @@ public class UserController {
     }
 
 
-
     @GetMapping(value = "/{userId}")
     public ResponseEntity<?> getOneUser(@PathVariable(value = "userId") UUID userId) {
+        log.info("REQUEST - GET [getOneUser] PARAMS : {}", userId.toString());
 
         Optional<UserModel> entity = userService.findById(userId);
 
         if (entity.isEmpty()) {
+            log.warn("RESPONSE - GET [getOneUser] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
-
-            return ResponseEntity.ok(entity.get().removeLinks());
+            log.info("RESPONSE - GET [getOneUser] : {}", logUtils.convertObjectToJson(entity.get()));
+            return ResponseEntity.ok(entity.get());
         }
     }
 
@@ -76,10 +77,12 @@ public class UserController {
     public ResponseEntity<?> updateUser(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.UserPut.class) @Validated(UserDTO.UserView.UserPut.class) UserDTO userDTO) {
+        log.info("REQUEST - GET [updateUser] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
+            log.warn("RESPONSE - GET [updateUser] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
@@ -91,6 +94,7 @@ public class UserController {
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
 
+            log.info("RESPONSE - GET [updateUser] : {}", logUtils.convertObjectToJson(userModel));
             return ResponseEntity.ok(userModel);
         }
     }
@@ -99,22 +103,27 @@ public class UserController {
     public ResponseEntity<?> updatePassword(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.PasswordPut.class) @Validated(UserDTO.UserView.PasswordPut.class) UserDTO userDTO) {
+        log.info("REQUEST - GET [updatePassword] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
+
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
+            log.warn("RESPONSE - GET [updatePassword] : User not found :: {}", userId.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
 
         if (!userDTO.getOldPassword().equals(entityDTO.get().getPassword())) {
-
+            log.warn("RESPONSE - GET [updatePassword] : Mismatched old password!");
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismatched old password!");
+
         } else {
             var userModel = entityDTO.get();
             userModel.setPassword(userDTO.getPassword());
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
 
+            log.info("RESPONSE - GET [updatePassword] : Password updated successfully!");
             return ResponseEntity.ok("Password updated successfully!");
         }
     }

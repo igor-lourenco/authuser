@@ -25,8 +25,20 @@ public class LogUtils {
             String pageJson = objectMapper.writeValueAsString(userModelPage);
             return pageJson;                                                     // Converte o objeto para JSON
         } catch (JsonProcessingException e) {
-            log.error("Error converting page to JSON", e);
+            log.error("Error converting page to JSON", e.getMessage());
             return userModelPage.toList().toString();
+        }
+    }
+
+    public String convertObjectToJson(Object obj) {
+        try {
+            objectMapper.registerModule(new JavaTimeModule());                     // Adiciona suporte para serialização e desserialização de tipos de data e hora do Java 8 (por exemplo, LocalDate, LocalDateTime).
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Força a não escrever datas como timestamps (Long), mas sim como String ("2024-07-12T16:29:23").
+            String pageJson = objectMapper.writeValueAsString(obj);
+            return pageJson;                                                     // Converte o objeto para JSON
+        } catch (JsonProcessingException e) {
+            log.error("Error converting page to JSON", e.getMessage());
+            return obj.toString();
         }
     }
 }
