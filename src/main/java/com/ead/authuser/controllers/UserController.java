@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +42,21 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<Page<UserModel>> findAllUsers(
+    public ResponseEntity<Page<UserModel>> findAllUsersPaged(
             SpecificationTemplate.UserSpec spec,
-            @PageableDefault(page = 0, size = 12, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
-        log.info("REQUEST - GET [findAllUsers] PARAMS PAGED: {}", pageable.toString());
+            @PageableDefault(page = 0, size = 12, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
+            @RequestParam(name = "courseId", required = false) UUID courseId) {
+        log.info("REQUEST - GET [findAllUsers] PARAMS :: courseId: {} - PAGED: {}", courseId, pageable.toString());
 
-        Page<UserModel> userModelPage = userService.findAllPaged(spec, pageable);
+        Page<UserModel> userModelPage = null;
+
+        if (courseId != null) {
+            Specification<UserModel> userCourseSpecification = SpecificationTemplate.userCourseId(courseId).and(spec);
+            userModelPage = userService.findAllPaged(userCourseSpecification, pageable);
+
+        }else{
+            userModelPage = userService.findAllPaged(spec, pageable);
+        }
 
         userModelPage.forEach(user -> user.addLinks());
 

@@ -18,7 +18,7 @@ public class UserCourseModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)// cria chave estrangeira(user_user_id) para referenciar o UserModel
     private UserModel user;
 
     @Column(nullable = false)
