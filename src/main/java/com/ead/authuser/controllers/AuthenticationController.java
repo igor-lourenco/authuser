@@ -32,7 +32,7 @@ public class AuthenticationController {
     @PostMapping(value = "/signup")
     public ResponseEntity<?> registerUser(
             @RequestBody @JsonView(UserDTO.UserView.RegistrationPost.class) @Validated(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO) {
-        log.info("REQUEST - POST [registerUser] PARAMS :: BODY: {}", logUtils.convertObjectToJson(userDTO));
+        log.info("REQUEST - POST [registerUser] : BODY: {}", logUtils.convertObjectToJson(userDTO));
 
         if (userService.existsByUsername(userDTO.getUsername())) {
             log.warn("RESPONSE - POST [registerUser] : Username is already taken!");
