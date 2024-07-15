@@ -3,6 +3,7 @@ package com.ead.authuser.controllers;
 import com.ead.authuser.DTOs.CourseDTO;
 import com.ead.authuser.clients.UserRequestClient;
 import com.ead.authuser.models.UserModel;
+import com.ead.authuser.utils.LogUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,15 +22,19 @@ public class UserCourseController {
 
     @Autowired
     UserRequestClient userRequestClient;
+    @Autowired
+    LogUtils logUtils;
     
-    @GetMapping(name = "/users/{userId}/courses")
+    @GetMapping(value = "/users/{userId}/courses")
     public ResponseEntity<Page<CourseDTO>> findAllCoursesByUserPaged(
             @PageableDefault(page = 0, size = 12, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable,
             @PathVariable(value = "userId") UUID userId){
+        log.info("REQUEST - GET [findAllCoursesByUserPaged] PARAMS :: userId: {} - PAGED: {}", userId, pageable.toString());
 
         Page<CourseDTO> coursesByUserPaged = userRequestClient.getAllCoursesByUserPaged(userId, pageable);
 
-
+        String pageJson = logUtils.convertObjectToJson(coursesByUserPaged);
+        log.info("RESPONSE - GET [findAllCoursesByUserPaged] : {}", pageJson);
         return ResponseEntity.ok().body(coursesByUserPaged);
     }
 }

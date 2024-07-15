@@ -18,7 +18,7 @@ public class LogUtils {
     @Autowired
     ObjectMapper objectMapper;
 
-    public String convertObjectToJson(Page<UserModel> userModelPage) {
+    public String convertObjectToJson(Page<?> userModelPage) {
         try {
             objectMapper.registerModule(new JavaTimeModule());                     // Adiciona suporte para serialização e desserialização de tipos de data e hora do Java 8 (por exemplo, LocalDate, LocalDateTime).
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Força a não escrever datas como timestamps (Long), mas sim como String ("2024-07-12T16:29:23").
