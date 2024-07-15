@@ -28,8 +28,12 @@ public class SpecificationTemplate {
     public static Specification<UserModel> userCourseId(final UUID courseId) {
         return ((root, query, criteriaBuilder) -> {
             query.distinct(true);
-            Join<UserModel, UserCourseModel> userProd = root.join("usersCourses"); //Realiza uma junção (join) entre UserModel e UserCourseModel com base na associação do atributo usersCourses.
-            return criteriaBuilder.equal(userProd.get("courseId"), courseId); // Adiciona uma condição where à consulta, especificando que o 'courseId' no UserCourseModel deve ser igual ao 'courseId' fornecido como parâmetro.
+
+            //Realiza uma junção (join) entre UserModel e UserCourseModel com base na associação do atributo usersCourses.
+            Join<UserModel, UserCourseModel> userProd = root.join("usersCourses");
+
+            // Adiciona uma condição where à consulta, especificando que o 'courseId' no UserCourseModel deve ser igual ao 'courseId' fornecido como parâmetro.
+            return criteriaBuilder.equal(userProd.get("courseId"), courseId);
         });
     }
 }
