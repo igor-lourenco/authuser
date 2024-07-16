@@ -46,7 +46,7 @@ public class AuthenticationController {
 
         var entityModel = new UserModel();
         BeanUtils.copyProperties(userDTO, entityModel);
-        entityModel.setUserStatus(UserStatus.ACTIVE);
+        entityModel.setUserStatus(UserStatus.BLOCKED);
         entityModel.setUserType(UserType.STUDENT);
         entityModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         entityModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));

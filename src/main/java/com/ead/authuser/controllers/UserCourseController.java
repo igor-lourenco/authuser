@@ -1,8 +1,7 @@
 package com.ead.authuser.controllers;
 
 import com.ead.authuser.DTOs.CourseDTO;
-import com.ead.authuser.clients.UserRequestClient;
-import com.ead.authuser.models.UserModel;
+import com.ead.authuser.clients.CourseRequestClient;
 import com.ead.authuser.utils.LogUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class UserCourseController {
 
     @Autowired
-    UserRequestClient userRequestClient;
+    CourseRequestClient courseRequestClient;
     @Autowired
     LogUtils logUtils;
     
@@ -31,7 +30,7 @@ public class UserCourseController {
             @PathVariable(value = "userId") UUID userId){
         log.info("REQUEST - GET [findAllCoursesByUserPaged] PARAMS :: userId: {} - PAGED: {}", userId, pageable.toString());
 
-        Page<CourseDTO> coursesByUserPaged = userRequestClient.getAllCoursesByUserPaged(userId, pageable);
+        Page<CourseDTO> coursesByUserPaged = courseRequestClient.getAllCoursesByUserPaged(userId, pageable);
 
         String pageJson = logUtils.convertObjectToJson(coursesByUserPaged);
         log.info("RESPONSE - GET [findAllCoursesByUserPaged] : {}", pageJson);

@@ -6,6 +6,7 @@ import com.ead.authuser.utils.LogUtils;
 import com.ead.authuser.utils.RequestClientUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpMethod;
@@ -19,18 +20,21 @@ import java.util.UUID;
 
 @Component
 @Log4j2
-public class UserRequestClient {
+public class CourseRequestClient {
 
     @Autowired
     RestTemplate restTemplate;
     @Autowired
     LogUtils logUtils;
 
+    @Value("${ead.api.url.course}")
+    private String REQUEST_URL_COURSE;
+
     public Page<CourseDTO> getAllCoursesByUserPaged(UUID userId, Pageable pageable) {
 
         List<CourseDTO> searchResult = null;
         ResponseEntity<ResponsePageDTO<CourseDTO>> result = null;
-        String url = RequestClientUtil.createUrl(userId, pageable);
+        String url = REQUEST_URL_COURSE + RequestClientUtil.createUrlGETAllCoursesByUser(userId, pageable);
 
         try {
             var responseType = new ParameterizedTypeReference<ResponsePageDTO<CourseDTO>>() {};
@@ -53,6 +57,4 @@ public class UserRequestClient {
 
         return result.getBody();
     }
-
-
 }

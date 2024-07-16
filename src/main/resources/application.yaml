@@ -21,3 +21,8 @@ spring:
 logging:
   level:
     com.ead.authuser: DEBUG   # Nivel de Log DEBUG especifico a partir do pacote base do projeto
+
+ead:
+  api:
+    url:
+      course: "http://localhost:8082"
