@@ -90,4 +90,8 @@ public class UserModel extends RepresentationModel<UserModel> implements Seriali
                                 .getOneUser(userId)    // método
                 ).withSelfRel());     // qualifica qual é a relação desse link com o recurso, nesse caso auto-relação
     }
+
+    public UserCourseModel convertToUserCourseModel(UUID courseId){
+        return new UserCourseModel(null, this, courseId);
+    }
 }
