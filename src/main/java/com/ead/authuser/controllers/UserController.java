@@ -69,12 +69,12 @@ public class UserController {
 
     @GetMapping(value = "/{userId}")
     public ResponseEntity<?> getOneUser(@PathVariable(value = "userId") UUID userId) {
-        log.info("REQUEST - GET [getOneUser] PARAMS : {}", userId.toString());
+        log.info("REQUEST - GET [getOneUser] PARAMS : {}", userId);
 
         Optional<UserModel> entity = userService.findById(userId);
 
         if (entity.isEmpty()) {
-            log.warn("RESPONSE - GET [getOneUser] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - GET [getOneUser] : User not found :: {}", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
@@ -87,12 +87,12 @@ public class UserController {
     public ResponseEntity<?> updateUser(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.UserPut.class) @Validated(UserDTO.UserView.UserPut.class) UserDTO userDTO) {
-        log.info("REQUEST - PUT [updateUser] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
+        log.info("REQUEST - PUT [updateUser] PARAMS :: userId: {} - BODY: {}", userId, logUtils.convertObjectToJson(userDTO));
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
-            log.warn("RESPONSE - PUT [updateUser] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - PUT [updateUser] : User not found :: {}", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
@@ -113,13 +113,13 @@ public class UserController {
     public ResponseEntity<?> updatePassword(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.PasswordPut.class) @Validated(UserDTO.UserView.PasswordPut.class) UserDTO userDTO) {
-        log.info("REQUEST - PUT [updatePassword] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
+        log.info("REQUEST - PUT [updatePassword] PARAMS :: userId: {} - BODY: {}", userId, logUtils.convertObjectToJson(userDTO));
 
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
-            log.warn("RESPONSE - PUT [updatePassword] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - PUT [updatePassword] : User not found :: {}", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
 
@@ -142,12 +142,12 @@ public class UserController {
     public ResponseEntity<?> updateImage(
             @PathVariable(value = "userId") UUID userId,
             @RequestBody @JsonView(UserDTO.UserView.ImagePut.class) @Validated(UserDTO.UserView.ImagePut.class) UserDTO userDTO) {
-        log.info("REQUEST - PUT [updateImage] PARAMS :: userId: {} - BODY: {}", userId.toString(), logUtils.convertObjectToJson(userDTO));
+        log.info("REQUEST - PUT [updateImage] PARAMS :: userId: {} - BODY: {}", userId, logUtils.convertObjectToJson(userDTO));
 
         Optional<UserModel> entityDTO = userService.findById(userId);
 
         if (entityDTO.isEmpty()) {
-            log.warn("RESPONSE - PUT [updateImage] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - PUT [updateImage] : User not found :: {}", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         } else {
             var userModel = entityDTO.get();
@@ -162,12 +162,12 @@ public class UserController {
 
     @DeleteMapping(value = "/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "userId") UUID userId) {
-        log.info("REQUEST - DELETE [deleteUser] PARAMS :: userId: {} ", userId.toString());
+        log.info("REQUEST - DELETE [deleteUser] PARAMS :: userId: {} ", userId);
 
         Optional<UserModel> entity = userService.findById(userId);
 
         if (entity.isEmpty()) {
-            log.warn("RESPONSE - DELETE [deleteUser] : User not found :: {}", userId.toString());
+            log.warn("RESPONSE - DELETE [deleteUser] : User not found :: {}", userId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
 
         } else {
