@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -70,6 +71,7 @@ public class UserModel extends RepresentationModel<UserModel> implements Seriali
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'") // Padrão ISO 8601 UTC
     private LocalDateTime lastUpdateDate;
 
+//  @OnDelete(action = OnDeleteAction.CASCADE) // Permite definir o comportamento de exclusão em cascata no nível do banco de dados para relacionamentos entre entidades
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Configuração de acesso que significa que essa propriedade só pode ser escrita (set) para desserialização, mas não será lida (get) na serialização, ou seja, o valor da propriedade não é incluído na serialização.
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) // // Campo que está a chave estrangeira na outra tabela para referenciar esse course e carregamento lento(FetchType.LAZY)
     private Set<UserCourseModel> usersCourses;
